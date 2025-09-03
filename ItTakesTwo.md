@@ -432,3 +432,5 @@ python train_single.py --exp_name 3q_d2048_h8_asym --num_qubits 3 --d_model 2048
 
 
 512 is fine 4 head is also good lets try more layers 
+Not changing the training dataset for the time being 
+need to figure out new ways for XAI which explain more about magic.

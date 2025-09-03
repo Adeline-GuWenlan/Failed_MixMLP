@@ -47,9 +47,9 @@ def parse_enhanced_args():
     base_parser.add_argument('--batch_size', type=int, default=512, help='Batch size')
     
     # Data parameters
-    base_parser.add_argument('--data_folder', default='../Decoded_Tokens', help='Data folder')
+    base_parser.add_argument('--data_folder', default='/home/gwl/3q/MixMLP/Decoded_Tokens', help='Data folder')
     base_parser.add_argument('--labels_path', 
-                           default='../Label/magic_labels_for_input_for_3_qubits_mixed_10000_datapoints.npy',
+                           default='/home/gwl/3q/MixMLP/Label/magic_labels_for_input_for_3_qubits_mixed_10000_datapoints.npy',
                            help='Labels path')
     base_parser.add_argument('--train_ratio', type=float, default=0.8, help='Train ratio')
     base_parser.add_argument('--val_ratio', type=float, default=0.1, help='Validation ratio')
