@@ -50,7 +50,7 @@ class StructuredAttention(nn.Module):
         
         # Compute attention scores
         scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(D // self.nhead)
-        
+         
         # Only apply CLS mask if needed (but no physics mask)
         if self.use_cls_token:
             attention_mask = self._create_attention_mask(N, device=scores.device)
