@@ -3,7 +3,7 @@ import torch.nn as nn
 
 class QuantumSizeExperts(nn.Module):
     """Expert projectors for different qubit system sizes"""
-    def __init__(self, value_dim: int = 62):
+    def __init__(self, value_dim):
         super().__init__()
         self.value_dim = value_dim
         
