@@ -8,7 +8,7 @@ from mlp import QuantumMagicMLPv2
 class CompleteQuantumMagicPredictor(nn.Module):
     """Complete pipeline: embedding → transformer → physics pooling → MLP"""
     def __init__(self, matrix_dim=None, n_qubits=2, d_model=64,
-                 pooling_type="cls", mlp_type="standard", use_physics_mask=False, 
+                 pooling_type="cls", mlp_type="standard",
                  mask_threshold=1, nhead=8, use_cls_token=True):
         super().__init__()
         # Auto-calculate matrix_dim from n_qubits if not provided
@@ -18,7 +18,6 @@ class CompleteQuantumMagicPredictor(nn.Module):
         self.matrix_dim = matrix_dim
         self.n_qubits = n_qubits
         self.d_model = d_model
-        self.use_physics_mask = use_physics_mask
         self.pooling_type = pooling_type
         self.mask_threshold = mask_threshold
         self.nhead = nhead
@@ -38,7 +37,7 @@ class CompleteQuantumMagicPredictor(nn.Module):
         self.encoder_layers = nn.ModuleList([
             PhysicsInformedTransformerEncoder(
                 d_model, nhead=nhead, matrix_dim=matrix_dim, n_qubits=n_qubits,
-                use_physics_mask=use_physics_mask, use_cls_token=self.use_cls_token,
+                use_cls_token=self.use_cls_token,
                 mask_threshold=mask_threshold
             ) for _ in range(4)
         ])
@@ -52,7 +51,6 @@ class CompleteQuantumMagicPredictor(nn.Module):
         self.mlp_head = QuantumMagicMLPv2(d_model=d_model, mlp_type=mlp_type, n_qubits=n_qubits)
         
         print(f"🔧 Model Config:")
-        print(f"   Physics Mask: {use_physics_mask}, Threshold: {mask_threshold}")
         print(f"   Pooling: {pooling_type}, Use CLS: {self.use_cls_token}")
         print(f"   MLP: {mlp_type}")
     

@@ -4,25 +4,20 @@ import torch.nn.functional as F
 import math
 
 class StructuredAttention(nn.Module):
-    def __init__(self, d_model, nhead, matrix_dim, n_qubits, use_physics_mask=False, 
-                 use_cls_token=True, mask_threshold=1):
+    def __init__(self, d_model, nhead, matrix_dim, n_qubits, 
+                 use_cls_token=True):
         super().__init__()
         self.d_model = d_model
         self.nhead = nhead
         self.matrix_dim = matrix_dim
         self.n_qubits = n_qubits
-        self.use_physics_mask = False  # Force disable physics mask for safety
-        self.use_cls_token = use_cls_token
-        self.mask_threshold = mask_threshold
-        
+        self.use_cls_token = use_cls_token        
         # Standard attention components
         self.q_linear = nn.Linear(d_model, d_model)
         self.k_linear = nn.Linear(d_model, d_model)
         self.v_linear = nn.Linear(d_model, d_model)
         self.out_linear = nn.Linear(d_model, d_model)
-        
-        # No physics mask - just register None buffer for compatibility
-        self.register_buffer('physics_mask', None)
+
     
     def _create_attention_mask(self, seq_len, device):
         """Create attention mask - only handle CLS token, no physics constraints"""
@@ -68,15 +63,13 @@ class StructuredAttention(nn.Module):
 
 class PhysicsInformedTransformerEncoder(nn.Module):
     """Transformer encoder layer with physics mask safely disabled"""
-    def __init__(self, d_model, nhead, matrix_dim, n_qubits, dim_feedforward=512, 
-                 dropout=0.05, use_physics_mask=False, mask_threshold=1, use_cls_token=True):
+    def __init__(self, d_model, nhead, matrix_dim, n_qubits, dim_feedforward=2048, 
+                 dropout=0.05, use_cls_token=True):
         super().__init__()
         
         # Force disable physics mask regardless of input parameter
         self.structured_attention = StructuredAttention(
-            d_model, nhead, matrix_dim, n_qubits, 
-            use_physics_mask=False,  # Always False for safety
-            mask_threshold=mask_threshold,
+            d_model, nhead, matrix_dim, n_qubits,
             use_cls_token=use_cls_token
         )
         self.norm1 = nn.LayerNorm(d_model)
